@@ -690,8 +690,8 @@
           <div class="eyebrow">Selected publications</div>
           <h2>Recent work</h2>
           <p>
-            This list is rendered from a JavaScript array so you can update publications by editing a few lines.
-            Replace or expand it with your complete bibliography, OR connect it later to a generated JSON file.
+            This section now loads automatically from <code>data/publications.json</code>.
+            The JSON file can be refreshed by a scheduled GitHub Action, so your homepage stays current without editing the HTML.
           </p>
         </div>
 
@@ -737,7 +737,7 @@
         photo: "",
         links: [
           { label: "Profile", url: "https://www.uu.se/en/department/immunology-genetics-and-pathology/research/vascular-biology/thomas-juan" },
-          { label: "Google Scholar", url: "#" }
+          { label: "Google Scholar", url: "https://scholar.google.com/citations?hl=en&user=vMfxQ8AAAAAJ&view_op=list_works&sortby=pubdate" }
         ]
       },
       {
@@ -790,37 +790,6 @@
       }
     ];
 
-    const publications = [
-      {
-        title: "A recombinase-activated ribozyme to knock down endogenous gene expression in zebrafish",
-        authors: "Juan T.; Molina T.; Xie L.; Papadopoulou S.; et al.",
-        journal: "PLOS Genetics",
-        year: "2025",
-        link: "#"
-      },
-      {
-        title: "Control of cardiac contractions using Cre-lox and degron strategies in zebrafish",
-        authors: "Juan T.; Bellec M.; Cardoso B.; Athéa H.; et al.",
-        journal: "PNAS",
-        year: "2024",
-        link: "#"
-      },
-      {
-        title: "egr3 is a mechanosensitive transcription factor gene required for cardiac valve morphogenesis",
-        authors: "da Silva A. R.; Gunawan F.; Boezio G. L. M.; Faure E.; et al.",
-        journal: "Science Advances",
-        year: "2024",
-        link: "#"
-      },
-      {
-        title: "Multiple pkd and piezo gene family members are required for atrioventricular valve formation",
-        authors: "Juan T.; Ribeiro da Silva A.; Cardoso B.; Lim S.; et al.",
-        journal: "Nature Communications",
-        year: "2023",
-        link: "#"
-      }
-    ];
-
     const teamGrid = document.getElementById('teamGrid');
     const pubList = document.getElementById('pubList');
 
@@ -840,34 +809,87 @@
       `;
     }
 
-    teamGrid.innerHTML = teamMembers.map(member => `
-      <article class="person-card">
-        <div class="person-top">
-          ${createAvatar(member)}
-          <div>
-            <h3 class="person-name">${member.name}</h3>
-            <p class="person-role">${member.role}</p>
+    function renderTeam() {
+      teamGrid.innerHTML = teamMembers.map(member => `
+        <article class="person-card">
+          <div class="person-top">
+            ${createAvatar(member)}
+            <div>
+              <h3 class="person-name">${member.name}</h3>
+              <p class="person-role">${member.role}</p>
+            </div>
           </div>
-        </div>
-        <p class="person-bio">${member.bio}</p>
-        ${createLinks(member.links)}
-      </article>
-    `).join('');
+          <p class="person-bio">${member.bio}</p>
+          ${createLinks(member.links)}
+        </article>
+      `).join('');
+    }
 
-    pubList.innerHTML = publications.map(pub => `
-      <article class="pub-card">
-        <div class="pub-meta">
-          <span>${pub.journal}</span>
-          <span>•</span>
-          <span>${pub.year}</span>
-        </div>
-        <h3 class="pub-title">
-          ${pub.link && pub.link !== '#' ? `<a href="${pub.link}" target="_blank" rel="noreferrer">${pub.title}</a>` : pub.title}
-        </h3>
-        <p class="pub-authors">${pub.authors}</p>
-      </article>
-    `).join('');
+    function escapeHtml(value = '') {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
 
+    function renderPublications(publications) {
+      if (!publications.length) {
+        pubList.innerHTML = '<p>No publications found yet.</p>';
+        return;
+      }
+
+      pubList.innerHTML = publications.map(pub => {
+        const title = escapeHtml(pub.title || 'Untitled');
+        const authors = escapeHtml(pub.authors || '');
+        const journal = escapeHtml(pub.journal || pub.type || '');
+        const year = escapeHtml(pub.year || '');
+        const link = pub.link ? escapeHtml(pub.link) : '';
+        const linkOpen = link ? `<a href="${link}" target="_blank" rel="noreferrer">` : '';
+        const linkClose = link ? '</a>' : '';
+
+        return `
+          <article class="pub-card">
+            <div class="pub-meta">
+              <span>${journal}</span>
+              ${journal && year ? '<span>•</span>' : ''}
+              <span>${year}</span>
+            </div>
+            <h3 class="pub-title">${linkOpen}${title}${linkClose}</h3>
+            <p class="pub-authors">${authors}</p>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function loadPublications() {
+      pubList.innerHTML = '<p>Loading publications…</p>';
+
+      try {
+        const response = await fetch('./data/publications.json', { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const publications = await response.json();
+        renderPublications(publications);
+      } catch (error) {
+        console.error('Failed to load publications:', error);
+        pubList.innerHTML = `
+          <article class="pub-card">
+            <h3 class="pub-title">Publications temporarily unavailable</h3>
+            <p class="pub-authors">Check back later, or visit the Google Scholar profile directly.</p>
+            <div class="person-links">
+              <a class="pill-link" href="https://scholar.google.com/citations?hl=en&user=vMfxQ8AAAAAJ&view_op=list_works&sortby=pubdate" target="_blank" rel="noreferrer">Open Google Scholar</a>
+            </div>
+          </article>
+        `;
+      }
+    }
+
+    renderTeam();
+    loadPublications();
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
