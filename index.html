@@ -68,15 +68,16 @@
 
     /* ─── Hero ─── */
     .hero {
-      padding: 7rem 0 5rem;
+      padding: 5rem 0 0;
       border-bottom: 1px solid var(--border);
     }
 
-    .hero-inner {
+    .hero-top {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
       gap: 4rem;
       align-items: start;
+      margin-bottom: 3.5rem;
     }
 
     .hero h1 {
@@ -117,6 +118,13 @@
     .hero-links a::after { content: '↗'; font-size: 0.8em; color: var(--light); }
     .hero-links a:hover { color: var(--muted); }
 
+    .hero-image {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+
     /* ─── Section shared ─── */
     .section { padding: 5rem 0; border-bottom: 1px solid var(--border); }
     .section:last-of-type { border-bottom: none; }
@@ -134,6 +142,17 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 2.5rem;
+    }
+
+    .research-item {}
+
+    .research-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 1.2rem;
+      filter: grayscale(15%);
     }
 
     .research-item h3 {
@@ -170,6 +189,40 @@
       margin-right: 0.4rem;
     }
 
+    /* ─── About strip ─── */
+    .about-strip {
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-inner img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .about-text h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.75;
+    }
+
     /* ─── Team ─── */
     .team-grid {
       display: grid;
@@ -181,8 +234,8 @@
     .person { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
 
     .person-avatar {
-      width: 120px;
-      height: 120px;
+      width: 130px;
+      height: 130px;
       border-radius: 50%;
       overflow: hidden;
       display: grid;
@@ -319,17 +372,21 @@
 
     /* ─── Responsive ─── */
     @media (max-width: 900px) {
-      .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-      .research-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-top { grid-template-columns: 1fr; gap: 2rem; }
+      .research-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .team-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+      .about-inner { grid-template-columns: 1fr; }
+      .about-inner img { height: 260px; }
     }
 
     @media (max-width: 600px) {
-      .hero { padding: 4rem 0 3rem; }
+      .hero { padding: 3.5rem 0 0; }
       .section { padding: 3.5rem 0; }
+      .about-strip { padding: 3.5rem 0; }
       .nav { height: auto; padding: 1rem 0; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
       .nav-links { gap: 1.2rem; }
-      .team-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .hero-image { height: 240px; }
     }
   </style>
 </head>
@@ -349,7 +406,7 @@
   <main id="top">
     <!-- Hero -->
     <section class="hero">
-      <div class="w hero-inner">
+      <div class="w hero-top">
         <div class="hero-text">
           <h1>Blood flow forces shape the cardiovascular system</h1>
           <p>
@@ -369,6 +426,12 @@
           </div>
         </div>
       </div>
+      <!-- Full-width hero image -->
+      <img
+        class="hero-image"
+        src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=1400&h=500&fit=crop&crop=center"
+        alt="Fluorescence microscopy of vasculature"
+      />
     </section>
 
     <!-- Research -->
@@ -377,6 +440,11 @@
         <h2 class="section-title">Research</h2>
         <div class="research-grid">
           <article class="research-item">
+            <img
+              class="research-img"
+              src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&h=400&fit=crop"
+              alt="Endothelial cell network under microscopy"
+            />
             <div class="research-tags">
               <span>Endothelium</span>
               <span>Mechanotransduction</span>
@@ -389,6 +457,11 @@
             </p>
           </article>
           <article class="research-item">
+            <img
+              class="research-img"
+              src="https://images.unsplash.com/photo-1535127022272-dbe7ee35cf33?w=600&h=400&fit=crop"
+              alt="Zebrafish embryo for live imaging"
+            />
             <div class="research-tags">
               <span>Zebrafish</span>
               <span>Live imaging</span>
@@ -401,6 +474,11 @@
             </p>
           </article>
           <article class="research-item">
+            <img
+              class="research-img"
+              src="https://images.unsplash.com/photo-1631556290934-e4adeae10c3d?w=600&h=400&fit=crop"
+              alt="CRISPR genetic tools and molecular biology"
+            />
             <div class="research-tags">
               <span>CRISPR</span>
               <span>Conditional knockdown</span>
@@ -411,6 +489,25 @@
               and bypass limits of classical mutants, including compensation and protein persistence.
             </p>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- About / Lab image strip -->
+    <section class="about-strip">
+      <div class="w about-inner">
+        <img
+          src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&h=600&fit=crop"
+          alt="Research laboratory with microscopy equipment"
+        />
+        <div class="about-text">
+          <h2>Mechanobiology in vivo</h2>
+          <p>
+            High-resolution imaging and zebrafish genetics make it possible to watch blood flow,
+            heart contractions, and cardiovascular cell behaviors as they unfold in real time.
+            Our approach combines forward genetics, conditional tools, and quantitative live imaging
+            to understand how physical forces are translated into biological outcomes during development.
+          </p>
         </div>
       </div>
     </section>
@@ -457,17 +554,24 @@
 
   <script>
     const team = [
-      { name: "Thomas Juan", role: "Research leader", initials: "TJ", photo: "",
+      { name: "Thomas Juan", role: "Research leader", initials: "TJ",
+        photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=260&h=260&fit=crop&crop=face",
         links: [
           { label: "Profile", url: "https://www.uu.se/en/department/immunology-genetics-and-pathology/research/vascular-biology/thomas-juan" },
-          { label: "Google Scholar", url: "#" }
+          { label: "Scholar", url: "#" }
         ]},
-      { name: "Shahd Aathar", role: "Group member", initials: "SA", photo: "", links: [] },
-      { name: "Cecilia Andersson", role: "Group member", initials: "CA", photo: "", links: [] },
-      { name: "Shivam Govind Jha", role: "Group member", initials: "SJ", photo: "", links: [] },
-      { name: "Sparshika Mishra", role: "Group member", initials: "SM", photo: "", links: [] },
-      { name: "Priyanka Sharma Juan", role: "Group member", initials: "PJ", photo: "", links: [] },
-      { name: "Armand Stoe", role: "Group member", initials: "AS", photo: "", links: [] }
+      { name: "Shahd Aathar", role: "Group member", initials: "SA",
+        photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=260&h=260&fit=crop&crop=face", links: [] },
+      { name: "Cecilia Andersson", role: "Group member", initials: "CA",
+        photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=260&h=260&fit=crop&crop=face", links: [] },
+      { name: "Shivam Govind Jha", role: "Group member", initials: "SJ",
+        photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=260&h=260&fit=crop&crop=face", links: [] },
+      { name: "Sparshika Mishra", role: "Group member", initials: "SM",
+        photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=260&h=260&fit=crop&crop=face", links: [] },
+      { name: "Priyanka Sharma Juan", role: "Group member", initials: "PJ",
+        photo: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=260&h=260&fit=crop&crop=face", links: [] },
+      { name: "Armand Stoe", role: "Group member", initials: "AS",
+        photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=260&h=260&fit=crop&crop=face", links: [] }
     ];
 
     const pubs = [
@@ -496,7 +600,7 @@
     // Render publications grouped by year
     const byYear = {};
     pubs.forEach(p => { (byYear[p.year] = byYear[p.year] || []).push(p); });
-    const pubHtml = Object.keys(byYear).sort((a,b) => b - a).map(year => `
+    document.getElementById('pubList').innerHTML = Object.keys(byYear).sort((a,b) => b - a).map(year => `
       <div class="pub-year">${year}</div>
       ${byYear[year].map(p => `
         <article class="pub-item">
@@ -506,7 +610,6 @@
         </article>
       `).join('')}
     `).join('');
-    document.getElementById('pubList').innerHTML = pubHtml;
 
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
