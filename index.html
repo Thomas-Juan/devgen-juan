@@ -198,40 +198,6 @@
       margin-right: 0.4rem;
     }
 
-    /* ─── About strip ─── */
-    .about-strip {
-      padding: 5rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-    }
-
-    .about-inner img {
-      width: 100%;
-      height: 340px;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-
-    .about-text h2 {
-      font-family: var(--serif);
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      font-weight: 400;
-      letter-spacing: -0.02em;
-      margin-bottom: 1rem;
-    }
-
-    .about-text p {
-      color: var(--muted);
-      font-size: 0.98rem;
-      line-height: 1.75;
-    }
-
     /* ─── Team ─── */
     .team-grid {
       display: grid;
@@ -293,11 +259,23 @@
       padding: 0.75rem 0;
       border-top: 1px solid var(--border);
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.2rem;
+      grid-template-columns: auto 1fr;
+      gap: 1.2rem;
+      align-items: start;
     }
 
     .pub-item:last-child { border-bottom: 1px solid var(--border); }
+
+    .pub-thumb {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 4px;
+      flex-shrink: 0;
+      filter: grayscale(20%);
+    }
+
+    .pub-body { display: flex; flex-direction: column; gap: 0.2rem; }
 
     .pub-item h3 {
       font-family: var(--serif);
@@ -318,6 +296,18 @@
       color: var(--light);
       font-style: italic;
     }
+
+    .pub-scholar-link {
+      font-size: 0.82rem;
+      color: var(--light);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 0.15rem;
+      transition: color 0.15s;
+    }
+    .pub-scholar-link:hover { color: var(--text); }
+    .pub-scholar-link::after { content: '↗'; font-size: 0.75em; }
 
     /* ─── Contact / CTA ─── */
     .contact-section {
@@ -373,18 +363,16 @@
       .hero-top { grid-template-columns: 1fr; gap: 2rem; }
       .research-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .team-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-      .about-inner { grid-template-columns: 1fr; }
-      .about-inner img { height: 260px; }
     }
 
     @media (max-width: 600px) {
       .hero { padding: 3.5rem 0 0; }
       .section { padding: 3.5rem 0; }
-      .about-strip { padding: 3.5rem 0; }
       .nav { height: auto; padding: 1rem 0; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
       .nav-links { gap: 1.2rem; }
       .team-grid { grid-template-columns: 1fr 1fr; }
       .hero-image { height: 240px; }
+      .pub-thumb { width: 60px; height: 60px; }
     }
   </style>
 </head>
@@ -448,17 +436,6 @@
       </div>
     </section>
 
-    <!-- About / Lab image strip -->
-    <section class="about-strip">
-      <div class="w about-inner">
-        <img id="aboutImage" alt="Abstract organic forms" />
-        <div class="about-text">
-          <h2 id="aboutHeading"></h2>
-          <p id="aboutText"></p>
-        </div>
-      </div>
-    </section>
-
     <!-- Team -->
     <section class="section" id="team">
       <div class="w">
@@ -499,31 +476,25 @@
        ═══════════════════════════════════════════════════════════════════════ */
 
     // ── Brand / Header ──────────────────────────────────────────────────
-    // Text shown next to the vascular tree logo in the sticky nav bar
     const BRAND_NAME = "Juan Lab";
 
     // ── Hero section ────────────────────────────────────────────────────
-    // Large serif headline at the top of the page
     const HERO_HEADLINE = "The cardiovascular system is shaped by mechanical forces";
 
-    // Paragraph below the headline summarising the lab's focus
     const HERO_DESCRIPTION =
       "We study how mechanical forces control cardiovascular development and function in a vertebrate model, the zebrafish. " +
       "We engineer biomolecules to control gene expression and stability " +
       "using high-throughput screening methods.";
 
-    // Affiliation block in the right column (HTML allowed, use <br /> for line breaks)
     const HERO_AFFILIATION =
       "Laboratory of Mechanosensation and Biomolecule engineering" +
       " · Uppsala University · Dpt. Immunology, Genetics and Pathology";
 
-    // Links shown below the affiliation (each gets an ↗ arrow)
     const HERO_LINKS = [
       { label: "Institutional page",
         url: "https://www.uu.se/en/department/immunology-genetics-and-pathology/research/vascular-biology/thomas-juan" },
     ];
 
-    // Full-width banner image below the hero text
     const HERO_IMAGE_URL =
       "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1400&h=500&fit=crop&crop=center";
 
@@ -533,14 +504,8 @@
     const SECTION_TITLE_PUBLICATIONS = "Publications";
 
     // ── Research cards ──────────────────────────────────────────────────
-    // Three-column grid. Each object = one card.
-    //   image       — card thumbnail URL
-    //   alt         — image alt text for accessibility
-    //   tags        — uppercase keyword chips shown above the title
-    //   title       — card heading (serif)
-    //   description — body text
     const RESEARCH_ITEMS = [
- {
+      {
         image: "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=600&h=400&fit=crop",
         alt: "Abstract light and motion",
         tags: ["Zebrafish", "Vertebrate model"],
@@ -550,7 +515,7 @@
           "As a standard model for studying cardiovascular malformations, their use at early stages also aligns with 3R principles " +
           ", making them well suited for investigating force-dependent developmental processes.",
       },      
-    {
+      {
         image: "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=600&h=400&fit=crop",
         alt: "Abstract flowing forms",
         tags: ["Endocardium", "Mechanosensation"],
@@ -560,7 +525,7 @@
           "by blood flow and cardiac contractions. The lab studies how these mechanical cues regulate endocardial identity and function, with " +
           "implications for heart failure and congenital heart disease.",
       },
-          {
+      {
         image: "https://images.unsplash.com/photo-1604871000636-074fa5117945?w=600&h=400&fit=crop",
         alt: "Abstract geometric pattern",
         tags: ["Genetic tools", "Biomolecule optimization"],
@@ -571,103 +536,82 @@
       },
     ];
 
-    // ── About strip (mid-page image + text block) ───────────────────────
-    // Image on the left, text on the right
-    const ABOUT_IMAGE_URL =
-      "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=800&h=600&fit=crop";
-
-    const ABOUT_HEADING = "Mechanobiology and Bioengineering in vivo";
-
-    const ABOUT_TEXT =
-      "High-resolution imaging and zebrafish genetics make it possible to watch blood flow, " +
-      "heart contractions, and cardiovascular cell behaviors as they unfold in real time. " +
-      "Our approach combines forward genetics, conditional tools, and quantitative live imaging " +
-      "to understand how physical forces are translated into biological outcomes during development.";
-
     // ── Team members ────────────────────────────────────────────────────
-    // Four-column grid of circular avatars.
-    //   name     — displayed below avatar
-    //   role     — subtitle (e.g. "Research leader", "PhD student")
-    //   initials — fallback shown inside grey circle when photo is ""
-    //   photo    — avatar URL (set to "" to show initials instead)
-    //   links    — optional array of { label, url } shown below the role
+    // Photos replaced with plant images
     const TEAM = [
       { name: "Thomas Juan", role: "Group leader", initials: "TJ",
-        photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=260&h=260&fit=crop&crop=face",
+        photo: "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=260&h=260&fit=crop",
         links: [
           { label: "ORCID", url: "https://orcid.org/0000-0002-9654-3717" },
           { label: "Scholar", url: "https://scholar.google.com/citations?user=vMfxQ8AAAAAJ&hl=en" },
         ]},
       { name: "Priyanka Sharma Juan", role: "Researcher", initials: "PJ",
-        photo: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=260&h=260&fit=crop&crop=face",
+        photo: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=260&h=260&fit=crop",
         links: [] },
       { name: "Cecilia Andersson", role: "Research assistant", initials: "CA",
-        photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=260&h=260&fit=crop&crop=face",
+        photo: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=260&h=260&fit=crop",
         links: [] },
       { name: "Armand Stoe", role: "Research assistant", initials: "AS",
-        photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=260&h=260&fit=crop&crop=face",
+        photo: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=260&h=260&fit=crop",
         links: [] },
       { name: "Shivam Govind Jha", role: "PhD candidate", initials: "SJ",
-        photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=260&h=260&fit=crop&crop=face",
+        photo: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=260&h=260&fit=crop",
         links: [] },
       { name: "Shahd Aathar", role: "Student", initials: "SA",
-        photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=260&h=260&fit=crop&crop=face",
+        photo: "https://images.unsplash.com/photo-1525498128493-380d1990a112?w=260&h=260&fit=crop",
         links: [] },
       { name: "Sparshika Mishra", role: "Student", initials: "SM",
-        photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=260&h=260&fit=crop&crop=face",
+        photo: "https://images.unsplash.com/photo-1444044205806-38f3ed106c10?w=260&h=260&fit=crop",
         links: [] },
     ];
 
     // ── Publications ────────────────────────────────────────────────────
-    // Flat list, newest first.
-    //   title   — paper title (rendered in serif)
-    //   authors — author string as you want it displayed
-    //   journal — journal name (italic)
-    //   year    — publication year
-    //   link    — DOI or URL; use "#" for no link (title won't be clickable)
+    // Added: image (abstract thumbnail) and scholarQuery (Google Scholar search term)
     const PUBLICATIONS = [
       { title: "A recombinase-activated ribozyme to knock down endogenous gene expression in zebrafish",
         authors: "Juan T, Molina T, Xie L, Papadopoulou S, et al.",
-        journal: "PLOS Genetics", year: "2025", link: "#" },
+        journal: "PLOS Genetics", year: "2025", link: "#",
+        image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=160&h=160&fit=crop",
+        scholarQuery: "A recombinase-activated ribozyme to knock down endogenous gene expression in zebrafish" },
       { title: "Control of cardiac contractions using Cre-lox and degron strategies in zebrafish",
         authors: "Juan T, Bellec M, Cardoso B, Athéa H, et al.",
-        journal: "PNAS", year: "2024", link: "#" },
+        journal: "PNAS", year: "2024", link: "#",
+        image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=160&h=160&fit=crop",
+        scholarQuery: "Control of cardiac contractions using Cre-lox and degron strategies in zebrafish" },
       { title: "egr3 is a mechanosensitive transcription factor gene required for cardiac valve morphogenesis",
         authors: "da Silva AR, Gunawan F, Boezio GLM, Faure E, et al.",
-        journal: "Science Advances", year: "2024", link: "#" },
+        journal: "Science Advances", year: "2024", link: "#",
+        image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=160&h=160&fit=crop",
+        scholarQuery: "egr3 is a mechanosensitive transcription factor gene required for cardiac valve morphogenesis" },
       { title: "Multiple pkd and piezo gene family members are required for atrioventricular valve formation",
         authors: "Juan T, Ribeiro da Silva A, Cardoso B, Lim S, et al.",
-        journal: "Nature Communications", year: "2023", link: "#" },
+        journal: "Nature Communications", year: "2023", link: "#",
+        image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=160&h=160&fit=crop",
+        scholarQuery: "Multiple pkd and piezo gene family members are required for atrioventricular valve formation" },
     ];
 
     // ── Contact section ─────────────────────────────────────────────────
-    // Heading and paragraph shown above the contact links
     const CONTACT_HEADING = "Interested in developmental mechanobiology and biomolecule engineering?";
 
     const CONTACT_TEXT =
       "We are always looking for motivated scientists at all levels. If you're interested " +
       "in joining the lab or collaborating, please get in touch.";
 
-    // Links with ↗ arrows
     const CONTACT_LINKS = [
       { label: "Contact us",
         url: "mailto:thomas.juan@igp.uu.se" },
     ];
 
     // ── Footer ──────────────────────────────────────────────────────────
-    // Text after the © year
     const FOOTER_TEXT = "Juan Lab · Uppsala University";
 
 
     /* ═══════════════════════════════════════════════════════════════════════
-       RENDERING — Populates the page from the variables above.
-       You should not need to edit anything below this line.
+       RENDERING
        ═══════════════════════════════════════════════════════════════════════ */
 
-    // Brand
     document.getElementById('brandName').textContent = BRAND_NAME;
 
-    // Hero
     document.getElementById('heroHeadline').textContent = HERO_HEADLINE;
     document.getElementById('heroDescription').textContent = HERO_DESCRIPTION;
     document.getElementById('heroAffiliation').innerHTML = HERO_AFFILIATION;
@@ -676,12 +620,10 @@
       `<a href="${l.url}" target="_blank" rel="noreferrer">${l.label}</a>`
     ).join('');
 
-    // Section titles
     document.getElementById('researchTitle').textContent = SECTION_TITLE_RESEARCH;
     document.getElementById('teamTitle').textContent = SECTION_TITLE_TEAM;
     document.getElementById('pubsTitle').textContent = SECTION_TITLE_PUBLICATIONS;
 
-    // Research grid
     document.getElementById('researchGrid').innerHTML = RESEARCH_ITEMS.map(r => `
       <article class="research-item">
         <img class="research-img" src="${r.image}" alt="${r.alt}" />
@@ -693,12 +635,6 @@
       </article>
     `).join('');
 
-    // About strip
-    document.getElementById('aboutImage').src = ABOUT_IMAGE_URL;
-    document.getElementById('aboutHeading').textContent = ABOUT_HEADING;
-    document.getElementById('aboutText').textContent = ABOUT_TEXT;
-
-    // Team
     document.getElementById('teamGrid').innerHTML = TEAM.map(m => `
       <div class="person">
         <div class="person-avatar">
@@ -710,23 +646,26 @@
       </div>
     `).join('');
 
-    // Publications
-    document.getElementById('pubList').innerHTML = PUBLICATIONS.map(p => `
+    document.getElementById('pubList').innerHTML = PUBLICATIONS.map(p => {
+      const scholarUrl = `https://scholar.google.com/scholar?q=${encodeURIComponent(p.scholarQuery)}`;
+      return `
       <article class="pub-item">
-        <h3>${p.link && p.link !== '#' ? `<a href="${p.link}" target="_blank" rel="noreferrer">${p.title}</a>` : p.title}</h3>
-        <div class="pub-authors">${p.authors}</div>
-        <div class="pub-journal">${p.journal} (${p.year})</div>
+        <img class="pub-thumb" src="${p.image}" alt="Abstract image for publication" />
+        <div class="pub-body">
+          <h3>${p.link && p.link !== '#' ? `<a href="${p.link}" target="_blank" rel="noreferrer">${p.title}</a>` : p.title}</h3>
+          <div class="pub-authors">${p.authors}</div>
+          <div class="pub-journal">${p.journal} (${p.year})</div>
+          <a class="pub-scholar-link" href="${scholarUrl}" target="_blank" rel="noreferrer">Google Scholar</a>
+        </div>
       </article>
-    `).join('');
+    `}).join('');
 
-    // Contact
     document.getElementById('contactHeading').textContent = CONTACT_HEADING;
     document.getElementById('contactText').textContent = CONTACT_TEXT;
     document.getElementById('contactLinks').innerHTML = CONTACT_LINKS.map(l =>
       `<a href="${l.url}" target="_blank" rel="noreferrer">${l.label}</a>`
     ).join('');
 
-    // Footer
     document.getElementById('footerText').textContent = FOOTER_TEXT;
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
