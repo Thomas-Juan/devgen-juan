@@ -286,6 +286,17 @@
 
     .pub-item h3 a:hover { text-decoration: underline; }
 
+    .pub-scholar-profile-link {
+      font-size: 0.82rem;
+      color: var(--light);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color 0.15s;
+    }
+    .pub-scholar-profile-link:hover { color: var(--text); }
+    .pub-scholar-profile-link::after { content: '↗'; font-size: 0.75em; }
+
     .pub-authors {
       font-size: 0.9rem;
       color: var(--muted);
@@ -537,56 +548,58 @@
     ];
 
     // ── Team members ────────────────────────────────────────────────────
-    // Photos replaced with plant images
+    // Each member has a distinct fish photo
     const TEAM = [
       { name: "Thomas Juan", role: "Group leader", initials: "TJ",
-        photo: "https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=260&h=260&fit=crop",
+        photo: "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=260&h=260&fit=crop",  // clownfish
         links: [
           { label: "ORCID", url: "https://orcid.org/0000-0002-9654-3717" },
           { label: "Scholar", url: "https://scholar.google.com/citations?user=vMfxQ8AAAAAJ&hl=en" },
         ]},
       { name: "Priyanka Sharma Juan", role: "Researcher", initials: "PJ",
-        photo: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=260&h=260&fit=crop",
+        photo: "https://images.unsplash.com/photo-1490718687940-0ecadf414600?w=260&h=260&fit=crop",  // betta / tropical fish
         links: [] },
       { name: "Cecilia Andersson", role: "Research assistant", initials: "CA",
-        photo: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=260&h=260&fit=crop",
+        photo: "https://images.unsplash.com/photo-1562564055-71e051d33c19?w=260&h=260&fit=crop",  // blue surgeonfish
         links: [] },
       { name: "Armand Stoe", role: "Research assistant", initials: "AS",
-        photo: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=260&h=260&fit=crop",
+        photo: "https://images.unsplash.com/photo-1544552866-d3ed42536cfd?w=260&h=260&fit=crop",  // goldfish
         links: [] },
       { name: "Shivam Govind Jha", role: "PhD candidate", initials: "SJ",
-        photo: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=260&h=260&fit=crop",
+        photo: "https://images.unsplash.com/photo-1571752726703-5e7d1f6a986d?w=260&h=260&fit=crop",  // koi
         links: [] },
       { name: "Shahd Aathar", role: "Student", initials: "SA",
-        photo: "https://images.unsplash.com/photo-1525498128493-380d1990a112?w=260&h=260&fit=crop",
+        photo: "https://images.unsplash.com/photo-1520366498724-709889c0c685?w=260&h=260&fit=crop",  // angelfish
         links: [] },
       { name: "Sparshika Mishra", role: "Student", initials: "SM",
-        photo: "https://images.unsplash.com/photo-1444044205806-38f3ed106c10?w=260&h=260&fit=crop",
+        photo: "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=260&h=260&fit=crop",  // colourful reef fish
         links: [] },
     ];
 
+    // ── Google Scholar profile ───────────────────────────────────────────
+    const SCHOLAR_PROFILE_URL = "https://scholar.google.com/citations?user=vMfxQ8AAAAAJ&hl=en";
+
     // ── Publications ────────────────────────────────────────────────────
-    // Added: image (abstract thumbnail) and scholarQuery (Google Scholar search term)
     const PUBLICATIONS = [
       { title: "A recombinase-activated ribozyme to knock down endogenous gene expression in zebrafish",
         authors: "Juan T, Molina T, Xie L, Papadopoulou S, et al.",
         journal: "PLOS Genetics", year: "2025", link: "#",
-        image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=160&h=160&fit=crop",
+        image: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=160&h=160&fit=crop",  // abstract gradient
         scholarQuery: "A recombinase-activated ribozyme to knock down endogenous gene expression in zebrafish" },
       { title: "Control of cardiac contractions using Cre-lox and degron strategies in zebrafish",
         authors: "Juan T, Bellec M, Cardoso B, Athéa H, et al.",
         journal: "PNAS", year: "2024", link: "#",
-        image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=160&h=160&fit=crop",
+        image: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=160&h=160&fit=crop",  // abstract purple
         scholarQuery: "Control of cardiac contractions using Cre-lox and degron strategies in zebrafish" },
       { title: "egr3 is a mechanosensitive transcription factor gene required for cardiac valve morphogenesis",
         authors: "da Silva AR, Gunawan F, Boezio GLM, Faure E, et al.",
         journal: "Science Advances", year: "2024", link: "#",
-        image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=160&h=160&fit=crop",
+        image: "https://images.unsplash.com/photo-1550684376-efcbd6e3f031?w=160&h=160&fit=crop",  // abstract blue geometry
         scholarQuery: "egr3 is a mechanosensitive transcription factor gene required for cardiac valve morphogenesis" },
       { title: "Multiple pkd and piezo gene family members are required for atrioventricular valve formation",
         authors: "Juan T, Ribeiro da Silva A, Cardoso B, Lim S, et al.",
         journal: "Nature Communications", year: "2023", link: "#",
-        image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=160&h=160&fit=crop",
+        image: "https://images.unsplash.com/photo-1523821741446-edb2b68bb7a0?w=160&h=160&fit=crop",  // abstract orange/gold
         scholarQuery: "Multiple pkd and piezo gene family members are required for atrioventricular valve formation" },
     ];
 
@@ -653,9 +666,9 @@
         <img class="pub-thumb" src="${p.image}" alt="Abstract image for publication" />
         <div class="pub-body">
           <h3>${p.link && p.link !== '#' ? `<a href="${p.link}" target="_blank" rel="noreferrer">${p.title}</a>` : p.title}</h3>
+          <a class="pub-scholar-profile-link" href="${SCHOLAR_PROFILE_URL}" target="_blank" rel="noreferrer">Google Scholar</a>
           <div class="pub-authors">${p.authors}</div>
           <div class="pub-journal">${p.journal} (${p.year})</div>
-          <a class="pub-scholar-link" href="${scholarUrl}" target="_blank" rel="noreferrer">Google Scholar</a>
         </div>
       </article>
     `}).join('');
